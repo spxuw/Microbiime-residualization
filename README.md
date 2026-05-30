@@ -112,76 +112,7 @@ Phenotype labels are permuted to generate a null distribution of Delta AUC. One-
 
 Feature importance is averaged across cross-validation models rather than estimated from a single full-data model. This reduces overfitting and improves stability of candidate taxa prioritization.
 
-## Outputs
 
-The pipeline generates:
-
-| Output | Description |
-|---|---|
-| `all_bioproject_metrics_binary.csv` | Per-BioProject AUROC, Delta AUC, permutation P values, and model summaries |
-| `*_imp_phenotype_full_rf_top50.csv` | Top phenotype-associated taxa from random forest models |
-| `*_imp_phenotype_full_xgb_top50.csv` | Top phenotype-associated taxa from XGBoost models |
-| `*_imp_age_rf_top50.csv` | Top age-associated taxa from random forest age models |
-| `*_imp_age_xgb_top50.csv` | Top age-associated taxa from XGBoost age models |
-| `auroc.csv` | Summary AUROC results across datasets |
-
-## Example usage
-
-```r
-results <- run_folder(
-  folder = "../data/clean",
-  k = 5,
-  repeats = 50,
-  seed = 345,
-  min_n = 20,
-  min_class = 10
-)
-
-write.csv(results, file = "../results/auroc.csv", row.names = FALSE)
-```
-
-## Methodological rationale
-
-Many microbiome disease-classification studies report strong prediction accuracy without asking whether the signal is disease-specific or driven by demographic structure. This is especially problematic when disease cases are older than controls, or when control groups are not age-matched.
-
-This framework treats age as a competing baseline predictor. By comparing microbiome models against an age-only null model, it quantifies whether microbial profiles add information beyond a major confounder.
-
-In this sense, Delta AUC serves as an interpretable measure of **age-independent microbial disease information**.
-
-## Recommended reporting
-
-For each BioProject, report:
-
-- sample size
-- phenotype class balance
-- age distribution by phenotype
-- age-only AUROC
-- full taxa-plus-age AUROC
-- Delta AUC
-- permutation P value
-- top phenotype-associated taxa
-- overlap between phenotype-associated and age-associated taxa
-
-## Repository structure
-
-```text
-.
-├── code/
-│   └── run_age_residualization_models.R
-├── data/
-│   └── clean/
-│       └── *.csv
-├── results/
-│   ├── auroc.csv
-│   └── model_outputs_binary/
-└── README.md
-```
-
-## Citation
-
-If you use this framework, please cite:
-
-**Masked by Age: uncovering age-independent and age-confounded microbial disease biomarkers using an age-residualization framework**
 
 ## Contact
 
